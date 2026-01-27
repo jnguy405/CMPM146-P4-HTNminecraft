@@ -265,7 +265,7 @@ def craft_cart_at_bench(state, ID):
     return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'ingot', 5), ('op_craft_cart_at_bench', ID)]
 
 # Register all recipe methods
-def register_all_methods():
+def registerMethods():
     """Register all recipe methods based on ITEM_RECIPES"""
     
     # Register produce_wood methods
@@ -303,23 +303,41 @@ def register_all_methods():
                          wooden_pickaxe_for_cobble, stone_pickaxe_for_cobble, 
                          iron_pickaxe_for_cobble)
 
-register_all_methods()
-
 '''end recipe methods'''
 
-# declare state
-state = pyhop.State('state')
-state.wood = {'agent': 0}
-state.time = {'agent': 4}
-# state.time = {'agent': 46}
-state.wooden_axe = {'agent': 0}
-state.made_wooden_axe = {'agent': False}
+# declare states
+def initialState(time=4):
+    """Create initial game state as a pyhop.State with all resources"""
+    state = pyhop.State('state')
+    
+    # All resources as dictionaries
+    resources = [
+        'wood', 'plank', 'stick', 'bench', 'wooden_axe', 'wooden_pickaxe',
+        'cobble', 'stone_axe', 'stone_pickaxe', 'furnace', 'iron_axe',
+        'iron_pickaxe', 'ingot', 'coal', 'ore', 'rail', 'cart'
+    ]
+    
+    # Initialize all resources to 0
+    for resource in resources:
+        setattr(state, resource, {'agent': 0})
+    
+    # Initialize time
+    state.time = {'agent': time}
+    
+    # Initialize all flags to False
+    flags = [
+        'made_bench', 'made_wooden_axe', 'made_wooden_pickaxe',
+        'made_stone_axe', 'made_stone_pickaxe', 'made_furnace',
+        'made_iron_axe', 'made_iron_pickaxe', 'made_rail', 'made_cart'
+    ]
+    
+    for flag in flags:
+        setattr(state, flag, {'agent': False})
+    
+    return state
 
-# Syntax for adding more resources to the state:
-# state.resource_name = {'agent': initial_amount}
-# ------------------------------------------------
-
-# your code here 
+registerMethods()
+state = initialState(time=4)
 
 # pyhop.print_operators()
 # pyhop.print_methods()
