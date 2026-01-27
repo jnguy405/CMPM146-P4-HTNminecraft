@@ -41,123 +41,133 @@ def check_enough(state, ID, item, num):
 def produce_enough(state, ID, item, num):
 	return [('produce', ID, item), ('have_enough', ID, item, num)]
 
+ITEM_RECIPES = {
+    'wood': {
+        'methods': ['punch_for_wood', 'wooden_axe_for_wood', 'stone_axe_for_wood', 'iron_axe_for_wood'],
+        'consume_once_flag': False  # These can be done multiple times
+    },
+    'plank': {
+        'prerequisites': [('wood', 1)],
+        'operator': 'op_craft_plank',
+        'consume_once_flag': False
+    },
+    'stick': {
+        'prerequisites': [('plank', 2)],
+        'operator': 'op_craft_stick',
+        'consume_once_flag': False
+    },
+    'bench': {
+        'prerequisites': [('plank', 4)],
+        'operator': 'op_craft_bench',
+        'consume_once_flag': True,
+        'flag_name': 'made_bench'
+    },
+    'wooden_axe': {
+        'methods': ['craft_wooden_axe_at_bench'],
+        'consume_once_flag': True,
+        'flag_name': 'made_wooden_axe'
+    },
+    'wooden_pickaxe': {
+        'prerequisites': [('bench', 1), ('plank', 3), ('stick', 2)],
+        'operator': 'op_craft_wooden_pickaxe_at_bench',
+        'consume_once_flag': True,
+        'flag_name': 'made_wooden_pickaxe'
+    },
+    'stone_axe': {
+        'prerequisites': [('bench', 1), ('cobble', 3), ('stick', 2)],
+        'operator': 'op_craft_stone_axe_at_bench',
+        'consume_once_flag': True,
+        'flag_name': 'made_stone_axe'
+    },
+    'stone_pickaxe': {
+        'prerequisites': [('bench', 1), ('cobble', 3), ('stick', 2)],
+        'operator': 'op_craft_stone_pickaxe_at_bench',
+        'consume_once_flag': True,
+        'flag_name': 'made_stone_pickaxe'
+    },
+    'furnace': {
+        'prerequisites': [('bench', 1), ('cobble', 8)],
+        'operator': 'op_craft_furnace_at_bench',
+        'consume_once_flag': True,
+        'flag_name': 'made_furnace'
+    },
+    'iron_axe': {
+        'prerequisites': [('bench', 1), ('ingot', 3), ('stick', 2)],
+        'operator': 'op_craft_iron_axe_at_bench',
+        'consume_once_flag': True,
+        'flag_name': 'made_iron_axe'
+    },
+    'iron_pickaxe': {
+        'prerequisites': [('bench', 1), ('ingot', 3), ('stick', 2)],
+        'operator': 'op_craft_iron_pickaxe_at_bench',
+        'consume_once_flag': True,
+        'flag_name': 'made_iron_pickaxe'
+    },
+    'ingot': {
+        'prerequisites': [('furnace', 1), ('coal', 1), ('ore', 1)],
+        'operator': 'op_smelt_ore_in_furnace',
+        'consume_once_flag': False
+    },
+    'coal': {
+        'methods': ['wooden_pickaxe_for_coal', 'stone_pickaxe_for_coal', 'iron_pickaxe_for_coal'],
+        'consume_once_flag': False
+    },
+    'ore': {
+        'methods': ['stone_pickaxe_for_ore', 'iron_pickaxe_for_ore'],
+        'consume_once_flag': False
+    },
+    'cobble': {
+        'methods': ['wooden_pickaxe_for_cobble', 'stone_pickaxe_for_cobble', 'iron_pickaxe_for_cobble'],
+        'consume_once_flag': False
+    },
+    'rail': {
+        'prerequisites': [('bench', 1), ('ingot', 6), ('stick', 1)],
+        'operator': 'op_craft_rail_at_bench',
+        'consume_once_flag': True,
+        'flag_name': 'made_rail'
+    },
+    'cart': {
+        'prerequisites': [('bench', 1), ('ingot', 5)],
+        'operator': 'op_craft_cart_at_bench',
+        'consume_once_flag': True,
+        'flag_name': 'made_cart'
+    }
+}
+
 def produce(state, ID, item):
-    if item == 'wood': 
-        return [('produce_wood', ID)]
+    """Refactored produce function using recipe definitions"""
     
-    elif item == 'plank':
-        return [('have_enough', ID, 'wood', 1), ('op_craft_plank', ID)]
-    
-    elif item == 'stick':
-        return [('have_enough', ID, 'plank', 2), ('op_craft_stick', ID)]
-    
-    elif item == 'bench':
-        if getattr(state, 'made_bench', {}).get(ID, False) is True:
-            return False
-        else:
-            state.made_bench[ID] = True
-        return [('have_enough', ID, 'plank', 4), ('op_craft_bench', ID)]
-    
-    elif item == 'wooden_axe':
-        if getattr(state, 'made_wooden_axe', {}).get(ID, False) is True:
-            return False
-        else:
-            state.made_wooden_axe[ID] = True
-        return [('produce_wooden_axe', ID)]
-    
-    elif item == 'wooden_pickaxe':
-        if getattr(state, 'made_wooden_pickaxe', {}).get(ID, False) is True:
-            return False
-        else:
-            state.made_wooden_pickaxe[ID] = True
-        return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'plank', 3), ('have_enough', ID, 'stick', 2), ('op_craft_wooden_pickaxe_at_bench', ID)]
-    
-    elif item == 'stone_axe':
-        if getattr(state, 'made_stone_axe', {}).get(ID, False) is True:
-            return False
-        else:
-            state.made_stone_axe[ID] = True
-        return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'cobble', 3), ('have_enough', ID, 'stick', 2), ('op_craft_stone_axe_at_bench', ID)]
-    
-    elif item == 'stone_pickaxe':
-        if getattr(state, 'made_stone_pickaxe', {}).get(ID, False) is True:
-            return False
-        else:
-            state.made_stone_pickaxe[ID] = True
-        return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'cobble', 3), ('have_enough', ID, 'stick', 2), ('op_craft_stone_pickaxe_at_bench', ID)]
-    
-    elif item == 'furnace':
-        if getattr(state, 'made_furnace', {}).get(ID, False) is True:
-            return False
-        else:
-            state.made_furnace[ID] = True
-        return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'cobble', 8), ('op_craft_furnace_at_bench', ID)]
-    
-    elif item == 'iron_axe':
-        if getattr(state, 'made_iron_axe', {}).get(ID, False) is True:
-            return False
-        else:
-            state.made_iron_axe[ID] = True
-        return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'ingot', 3), ('have_enough', ID, 'stick', 2), ('op_craft_iron_axe_at_bench', ID)]
-    
-    elif item == 'iron_pickaxe':
-        if getattr(state, 'made_iron_pickaxe', {}).get(ID, False) is True:
-            return False
-        else:
-            state.made_iron_pickaxe[ID] = True
-        return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'ingot', 3), ('have_enough', ID, 'stick', 2), ('op_craft_iron_pickaxe_at_bench', ID)]
-    
-    elif item == 'ingot':
-        return [('have_enough', ID, 'furnace', 1), ('have_enough', ID, 'coal', 1), ('have_enough', ID, 'ore', 1), ('op_smelt_ore_in_furnace', ID)]
-    
-    elif item == 'coal':
-        # multiple ways to get coal
-        # try iron_pickaxe first (fastest)
-        if state.iron_pickaxe.get(ID, 0) >= 1:
-            return [('op_iron_pickaxe_for_coal', ID)]
-        elif state.stone_pickaxe.get(ID, 0) >= 1:
-            return [('op_stone_pickaxe_for_coal', ID)]
-        elif state.wooden_pickaxe.get(ID, 0) >= 1:
-            return [('op_wooden_pickaxe_for_coal', ID)]
-        else:
-            return False  # need a pickaxe
-    
-    elif item == 'ore':
-        # multiple ways to get ore
-        if state.iron_pickaxe.get(ID, 0) >= 1:
-            return [('op_iron_pickaxe_for_ore', ID)]
-        elif state.stone_pickaxe.get(ID, 0) >= 1:
-            return [('op_stone_pickaxe_for_ore', ID)]
-        else:
-            return False  # need an appropriate pickaxe
-    
-    elif item == 'cobble':
-        # multiple ways to get cobble
-        if state.iron_pickaxe.get(ID, 0) >= 1:
-            return [('op_iron_pickaxe_for_cobble', ID)]
-        elif state.stone_pickaxe.get(ID, 0) >= 1:
-            return [('op_stone_pickaxe_for_cobble', ID)]
-        elif state.wooden_pickaxe.get(ID, 0) >= 1:
-            return [('op_wooden_pickaxe_for_cobble', ID)]
-        else:
-            return False  # need a pickaxe
-    
-    elif item == 'rail':
-        if getattr(state, 'made_rail', {}).get(ID, False) is True:
-            return False
-        else:
-            state.made_rail[ID] = True
-        return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'ingot', 6), ('have_enough', ID, 'stick', 1), ('op_craft_rail_at_bench', ID)]
-    
-    elif item == 'cart':
-        if getattr(state, 'made_cart', {}).get(ID, False) is True:
-            return False
-        else:
-            state.made_cart[ID] = True
-        return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'ingot', 5), ('op_craft_cart_at_bench', ID)]
-    
-    else:
+    # Check if item exists in our recipe definitions
+    if item not in ITEM_RECIPES:
         return False
+    
+    recipe = ITEM_RECIPES[item]
+    
+    # Handle "consume once" items (tools)
+    if recipe.get('consume_once_flag', False):
+        flag_name = recipe['flag_name']
+        if getattr(state, flag_name, {}).get(ID, False):
+            return False
+        # Set the flag
+        if not hasattr(state, flag_name):
+            setattr(state, flag_name, {})
+        getattr(state, flag_name)[ID] = True
+    
+    # Handle items with multiple production methods
+    if 'methods' in recipe:
+        # Return the appropriate method call
+        return [('produce_' + item, ID)]
+    
+    # Handle items with direct prerequisites and operators
+    elif 'prerequisites' in recipe and 'operator' in recipe:
+        # Build the list of prerequisite checks
+        prerequisites = [('have_enough', ID, req_item, req_amount) 
+                        for req_item, req_amount in recipe['prerequisites']]
+        # Add the operator at the end
+        prerequisites.append((recipe['operator'], ID))
+        return prerequisites
+    
+    return False
 
 pyhop.declare_methods('have_enough', check_enough, produce_enough)
 pyhop.declare_methods('produce', produce)
@@ -240,23 +250,45 @@ def craft_cart_at_bench(state, ID):
     return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'ingot', 5), ('op_craft_cart_at_bench', ID)]
 
 # Register all recipe methods
-pyhop.declare_methods('produce_wood', punch_for_wood, wooden_axe_for_wood, stone_axe_for_wood, iron_axe_for_wood)
-pyhop.declare_methods('produce_plank', craft_plank)
-pyhop.declare_methods('produce_stick', craft_stick)
-pyhop.declare_methods('produce_bench', craft_bench)
-pyhop.declare_methods('produce_wooden_axe', craft_wooden_axe_at_bench)
-pyhop.declare_methods('produce_wooden_pickaxe', craft_wooden_pickaxe_at_bench)
-pyhop.declare_methods('produce_stone_axe', craft_stone_axe_at_bench)
-pyhop.declare_methods('produce_stone_pickaxe', craft_stone_pickaxe_at_bench)
-pyhop.declare_methods('produce_furnace', craft_furnace_at_bench)
-pyhop.declare_methods('produce_iron_axe', craft_iron_axe_at_bench)
-pyhop.declare_methods('produce_iron_pickaxe', craft_iron_pickaxe_at_bench)
-pyhop.declare_methods('produce_ingot', smelt_ore_in_furnace)
-pyhop.declare_methods('produce_coal', wooden_pickaxe_for_coal, stone_pickaxe_for_coal, iron_pickaxe_for_coal)
-pyhop.declare_methods('produce_ore', stone_pickaxe_for_ore, iron_pickaxe_for_ore)
-pyhop.declare_methods('produce_cobble', wooden_pickaxe_for_cobble, stone_pickaxe_for_cobble, iron_pickaxe_for_cobble)
-pyhop.declare_methods('produce_rail', craft_rail_at_bench)
-pyhop.declare_methods('produce_cart', craft_cart_at_bench)
+def register_all_methods():
+    """Register all recipe methods based on ITEM_RECIPES"""
+    
+    # Register produce_wood methods
+    pyhop.declare_methods('produce_wood', 
+                         punch_for_wood, wooden_axe_for_wood, 
+                         stone_axe_for_wood, iron_axe_for_wood)
+    
+    # Register other items with single methods
+    single_method_items = {
+        'plank': craft_plank,
+        'stick': craft_stick,
+        'bench': craft_bench,
+        'wooden_axe': craft_wooden_axe_at_bench,
+        'wooden_pickaxe': craft_wooden_pickaxe_at_bench,
+        'stone_axe': craft_stone_axe_at_bench,
+        'stone_pickaxe': craft_stone_pickaxe_at_bench,
+        'furnace': craft_furnace_at_bench,
+        'iron_axe': craft_iron_axe_at_bench,
+        'iron_pickaxe': craft_iron_pickaxe_at_bench,
+        'ingot': smelt_ore_in_furnace,
+        'rail': craft_rail_at_bench,
+        'cart': craft_cart_at_bench
+    }
+    
+    for item_name, method_func in single_method_items.items():
+        pyhop.declare_methods(f'produce_{item_name}', method_func)
+    
+    # Register items with multiple methods
+    pyhop.declare_methods('produce_coal', 
+                         wooden_pickaxe_for_coal, stone_pickaxe_for_coal, 
+                         iron_pickaxe_for_coal)
+    pyhop.declare_methods('produce_ore', 
+                         stone_pickaxe_for_ore, iron_pickaxe_for_ore)
+    pyhop.declare_methods('produce_cobble', 
+                         wooden_pickaxe_for_cobble, stone_pickaxe_for_cobble, 
+                         iron_pickaxe_for_cobble)
+
+register_all_methods()
 
 '''end recipe methods'''
 
