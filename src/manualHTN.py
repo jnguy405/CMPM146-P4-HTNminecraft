@@ -181,7 +181,7 @@ def craft_plank(state, ID):
 
 def craft_stick(state, ID):
     return [('op_craft_stick', ID)]
-s
+
 def craft_bench(state, ID):
     return [('op_craft_bench', ID)]
 
