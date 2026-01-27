@@ -16,7 +16,22 @@ def produce(state, ID, item):
 pyhop.declare_methods('produce', produce)
 
 def make_method(name, rule):
+	# Creates a method function from a recipe rule in JSON
+	# Contains: preconditions to check and operator to call
+	# Produces: what it makes
+	# Requires: what it needs
+	# Time: time required to make
+	# Returns a method function
+	# Checks the preconditions, then returns the task list if they are met
+	# Calls the appropriate operator to perform the action
 	def method(state, ID):
+		# list of tasks
+		# tasks = []
+		# foreach precondition in rule['Preconditions']:
+		# tasks.append(('have_enough', ID, precondition['item'], precondition['amount']))
+		# tasks.append(('op_produce_{}'.format(name), ID))
+		# return tasks
+
 		# your code here
 		pass
 
@@ -28,17 +43,44 @@ def declare_methods(data):
 
 	# your code here
 	# hint: call make_method, then declare the method to pyhop using pyhop.declare_methods('foo', m1, m2, ..., mk)	
+
+	# -------------------------------------------------------------------------------
+	# Create a dictionary to hold methods for each product
+	# product_methods = {}
+	# for each recipe in data['Recipes']:
+	# method = make_method(recipe_name, recipe_rule)
+	# add method to product_methods[product_name]
+
+	# for each product_name in product_methods:
+	# sort product_methods[product_name] by recipe['Time']
+	# pyhop.declare_methods(product_name, *product_methods[product_name])
 	pass			
 
 def make_operator(rule):
 	def operator(state, ID):
 		# your code here
+
+		# if not enough time
+		# return False
+		# for each required item in rule['Requires']:
+		# if not enough of that item
+		# return False
+		# else
+		# update state: add produced items, subtract used items, subtract time
+		# return state
 		pass
 	return operator
 
 def declare_operators(data):
 	# your code here
 	# hint: call make_operator, then declare the operator to pyhop using pyhop.declare_operators(o1, o2, ..., ok)
+
+	# list of operators
+	# operators = []
+	# for each recipe in data['Recipes']:
+	# operator = make_operator(recipe_rule)
+	# operators.append(operator)
+	# pyhop.declare_operators(*operators)
 	pass
 
 def add_heuristic(data, ID):
@@ -47,6 +89,20 @@ def add_heuristic(data, ID):
 	# e.g. def heuristic2(...); pyhop.add_check(heuristic2)
 	def heuristic(state, curr_task, tasks, plan, depth, calling_stack):
 		# your code here
+
+		# if repeated cycle detected in calling_stack
+		# return True
+
+		# check if time left is enough to complete curr_task and remaining tasks
+		# if not enough time
+		# return True
+
+		# are we producing something we've already made?
+		# if current task == item we've already made
+		# return True
+
+		# more domain knowledge based pruning conditions
+
 		return False # if True, prune this branch
 
 	pyhop.add_check(heuristic)
@@ -55,6 +111,12 @@ def define_ordering(data, ID):
 	# if needed, use the function below to return a different ordering for the methods
 	# note that this should always return the same methods, in a new order, and should not add/remove any new ones
 	def reorder_methods(state, curr_task, tasks, plan, depth, calling_stack, methods):
+		# If task is to produce an item that is required by another task in tasks,
+		# move that method to the front of the methods list
+		# check for most efficient method (fastest time) to produce the item
+		# prioritize methods with tools or items already available in state (we already have them)
+		# return the reordered methods list
+		
 		return methods
 	
 	pyhop.define_ordering(reorder_methods)

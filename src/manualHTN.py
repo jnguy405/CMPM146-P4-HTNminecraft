@@ -18,6 +18,16 @@ def op_craft_wooden_axe_at_bench(state, ID):
 		return state
 	return False
 
+# Syntax for adding more operators:
+# op_def operator_name(state, ID):
+# if state.time[ID] >= required_time and state.resource1[ID] >= required_amount1 and ... :
+# state.resourceX[ID] += change_in_resourceX
+# state.resourceY[ID] -= change_in_resourceY
+# state.time[ID] -= required_time
+# return state
+# return False
+# ------------------------------------------------
+
 # your code here
 
 pyhop.declare_operators(op_punch_for_wood, op_craft_wooden_axe_at_bench)
@@ -34,6 +44,12 @@ def produce_enough(state, ID, item, num):
 def produce(state, ID, item):
 	if item == 'wood': 
 		return [('produce_wood', ID)]
+	
+	# Syntax for adding more items to produce:
+	# elif item == 'item_name':
+	# return [('produce_item_name', ID)]
+	# ------------------------------------------------
+
 	# your code here
 	elif item == 'wooden_axe':
 		# this check to make sure we're not making multiple axes
@@ -56,6 +72,11 @@ def punch_for_wood(state, ID):
 def craft_wooden_axe_at_bench(state, ID):
 	return [('have_enough', ID, 'bench', 1), ('have_enough', ID, 'stick', 2), ('have_enough', ID, 'plank', 3), ('op_craft_wooden_axe_at_bench', ID)]
 
+# Syntax for adding more recipe methods:
+# def produce_item_name(state, ID):
+# return [('have_enough', ID, 'resource1', required_amount1), ..., (''op_produce_item_name', ID)]
+# ---------------------------------------------------------------------------------------------------
+
 # your code here
 
 pyhop.declare_methods('produce_wood', punch_for_wood)
@@ -70,6 +91,11 @@ state.time = {'agent': 4}
 # state.time = {'agent': 46}
 state.wooden_axe = {'agent': 0}
 state.made_wooden_axe = {'agent': False}
+
+# Syntax for adding more resources to the state:
+# state.resource_name = {'agent': initial_amount}
+# ------------------------------------------------
+
 # your code here 
 
 # pyhop.print_operators()
