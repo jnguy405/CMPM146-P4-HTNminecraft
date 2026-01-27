@@ -135,7 +135,22 @@ ITEM_RECIPES = {
 }
 
 def produce(state, ID, item):
-    """Refactored produce function using recipe definitions"""
+    """Refactored produce function using recipe definitions
+    
+    Example workflow for 'wooden_axe':
+    1. Check if 'wooden_axe' exists in ITEM_RECIPES
+    2. Since it's a 'consume_once_flag' item, check/set the made_wooden_axe flag
+    3. Item has 'methods': ['craft_wooden_axe_at_bench']
+    4. Returns: [('produce_wooden_axe', ID)]
+    5. pyhop then uses the registered 'produce_wooden_axe' method which calls craft_wooden_axe_at_bench
+    
+    Example workflow for 'plank':
+    1. Check if 'plank' exists in ITEM_RECIPES
+    2. Item has 'prerequisites': [('wood', 1)] and 'operator': 'op_craft_plank'
+    3. Returns: [('have_enough', ID, 'wood', 1), ('op_craft_plank', ID)]
+    4. pyhop first ensures we have wood, then executes the craft operator
+
+    """
     
     # Check if item exists in our recipe definitions
     if item not in ITEM_RECIPES:
