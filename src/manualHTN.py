@@ -471,8 +471,10 @@ def registerMethods():
     
     # Register produce_wood methods
     pyhop.declare_methods('produce_wood', 
-                         punch_for_wood, wooden_axe_for_wood, 
-                         stone_axe_for_wood, iron_axe_for_wood)
+                        iron_axe_for_wood,        # 1 time (fastest)
+                        stone_axe_for_wood,       # 1 time  
+                        wooden_axe_for_wood,      # 2 time
+                        punch_for_wood)           # 4 time (slowest)
     
     # Register other items with single methods
     single_method_items = {
@@ -506,7 +508,9 @@ def registerMethods():
 
 '''end recipe methods'''
 
-# declare states
+#
+# Declare states
+#
 def initialState(time=4):
     """Create initial game state as a pyhop.State with all resources"""
     state = pyhop.State('state')
@@ -537,6 +541,24 @@ def initialState(time=4):
     
     return state
 
+#
+# Define a simple heuristic to filter out time consuming production
+#
+def heuristic(state, curr_task, tasks, plan, depth, calling_stack):
+    # Only prune if we have tasks remaining AND no time
+    if tasks and state.time['agent'] <= 0:
+        # Check if any remaining tasks require time
+        for task in tasks:
+            if task[0] == 'have_enough':
+                item = task[2]
+                needed = task[3]
+                current = getattr(state, item, {}).get('agent', 0)
+                if current < needed:
+                    return True  # Need to produce more, but no time
+    return False  # Don't prune
+
+pyhop.add_check(heuristic)
+
 registerMethods()
 state = initialState(time=4)
 
@@ -545,3 +567,22 @@ state = initialState(time=4)
 
 pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 1)], verbose=3)
 # pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 12)], verbose=3)
+
+# Test 1: Get 1 wood (already works)
+state = initialState(time=4)
+print("Test 1: Get 1 wood")
+result = pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 1)], verbose=1)
+print(f"Result: {result}\n")
+
+# Test 2: Get wooden axe
+state = initialState(time=20)
+print("Test 2: Get wooden axe")
+result = pyhop.pyhop(state, [('have_enough', 'agent', 'wooden_axe', 1)], verbose=1)
+print(f"Result: {result}\n")
+
+# Test 3: Get 4 wood with wooden axe
+state = initialState(time=20)
+state.wooden_axe = {'agent': 1}  # Start with axe
+print("Test 3: Get 4 wood with existing wooden axe")
+result = pyhop.pyhop(state, [('have_enough', 'agent', 'wood', 4)], verbose=1)
+print(f"Result: {result}\n")
