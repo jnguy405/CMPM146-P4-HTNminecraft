@@ -26,15 +26,20 @@ def make_method(name, rule):
 	# Calls the appropriate operator to perform the action
 	def method(state, ID):
 		# list of tasks
-		# tasks = []
+		tasks = []
 		# foreach precondition in rule['Preconditions']:
+		for item, qty in rule.get('Requires', {}).items():
+			tasks.append(('have_enough', ID, item, qty))
+		for item, qty in rule.get('Consumes', {}).items():
+			tasks.append(('have_enough', ID, item, qty))
+		
 		# tasks.append(('have_enough', ID, precondition['item'], precondition['amount']))
 		# tasks.append(('op_produce_{}'.format(name), ID))
 		# return tasks
+		operator_name = 'op_produce_{}'.format(name)
+		tasks.append((operator_name, ID))
 
-		# your code here
-		pass
-
+		return tasks
 	return method
 
 def declare_methods(data):
@@ -46,15 +51,38 @@ def declare_methods(data):
 
 	# -------------------------------------------------------------------------------
 	# Create a dictionary to hold methods for each product
-	# product_methods = {}
+	product_methods = {}
+
+	# get recipes from data
+	recipes = data['Recipes']
+	sorted_recipes = sorted(recipes.keys(), key=lambda r: recipes[r]['Time'])
+
+	# for each recipe in the sorted recipes
+	# create a method with make_method, add it to product_methods
+	for recipe_name in sorted_recipes:
+		rule = recipes[recipe_name]
+
+		# for each product produced by the recipe; initialize product_methods entry if not present
+		for product_name in rule['Produces']:
+			if product_name not in product_methods:
+				product_methods[product_name] = []
+		
+		# create method and add to product_methods for each product
+		method = make_method(recipe_name, rule)
+		product_methods[product_name].append(method)
+
+	# declare methods to pyhop
+	for product, methods in product_methods.items():
+		pyhop.declare_methods(product, *methods)
+
+
 	# for each recipe in data['Recipes']:
 	# method = make_method(recipe_name, recipe_rule)
 	# add method to product_methods[product_name]
 
 	# for each product_name in product_methods:
 	# sort product_methods[product_name] by recipe['Time']
-	# pyhop.declare_methods(product_name, *product_methods[product_name])
-	pass			
+	# pyhop.declare_methods(product_name, *product_methods[product_name])			
 
 def make_operator(rule):
 	def operator(state, ID):
@@ -62,13 +90,32 @@ def make_operator(rule):
 
 		# if not enough time
 		# return False
+		if state.time[ID] < rule['Time']:
+			return False
+		
 		# for each required item in rule['Requires']:
 		# if not enough of that item
 		# return False
-		# else
-		# update state: add produced items, subtract used items, subtract time
-		# return state
-		pass
+		for item, qty in rule.get('Requires', {}).items():
+			if getattr(state, item)[ID] < qty:
+				return False
+		
+		# for each consumed item in rule['Consumes']:
+		# if not enough of that item
+		for item, qty in rule.get('Consumes', {}).items():
+			if getattr(state, item)[ID] < qty:
+				return False
+		
+		# subtract time, consumed items; add the produced items
+		state.time[ID] -= rule['Time']
+
+		for item, qty in rule.get('Consumes', {}).items():
+			getattr(state, item)[ID] -= qty
+		
+		for item, qty in rule.get('Produces', {}).items():
+			getattr(state, item)[ID] += qty
+
+		return state
 	return operator
 
 def declare_operators(data):
@@ -76,12 +123,15 @@ def declare_operators(data):
 	# hint: call make_operator, then declare the operator to pyhop using pyhop.declare_operators(o1, o2, ..., ok)
 
 	# list of operators
-	# operators = []
+	operators = []
 	# for each recipe in data['Recipes']:
+	for recipe_name, recipe_rule in data['Recipes'].items():
+		operator = make_operator(recipe_rule)
+		operators.append(operator)
 	# operator = make_operator(recipe_rule)
 	# operators.append(operator)
 	# pyhop.declare_operators(*operators)
-	pass
+	pyhop.declare_operators(*operators)
 
 def add_heuristic(data, ID):
 	# prune search branch if heuristic() returns True
@@ -90,16 +140,27 @@ def add_heuristic(data, ID):
 	def heuristic(state, curr_task, tasks, plan, depth, calling_stack):
 		# your code here
 
+		if curr_task in calling_stack:
+			return True
 		# if repeated cycle detected in calling_stack
 		# return True
+		if state.time[ID] < 0:
+			return True
 
 		# check if time left is enough to complete curr_task and remaining tasks
 		# if not enough time
 		# return True
-
+			
 		# are we producing something we've already made?
 		# if current task == item we've already made
 		# return True
+
+		if curr_task[0] == 'produce':
+			item = curr_task[2]
+
+			if item in data['Tools'] and getattr(state, item)[ID] >= 1:
+				return True
+		return False
 
 		# more domain knowledge based pruning conditions
 
