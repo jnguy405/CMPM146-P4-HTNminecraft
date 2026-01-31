@@ -25,6 +25,7 @@ def make_method(name, rule):
 	# Checks the preconditions, then returns the task list if they are met
 	# Calls the appropriate operator to perform the action
 	def method(state, ID):
+		# ID = args[0]
 		# list of tasks
 		tasks = []
 		# foreach precondition in rule['Preconditions']:
@@ -36,7 +37,7 @@ def make_method(name, rule):
 		# tasks.append(('have_enough', ID, precondition['item'], precondition['amount']))
 		# tasks.append(('op_produce_{}'.format(name), ID))
 		# return tasks
-		operator_name = 'op_produce_{}'.format(name)
+		operator_name = 'op_produce_{}'.format(name.replace(' ', '_'))
 		tasks.append((operator_name, ID))
 
 		return tasks
@@ -73,7 +74,7 @@ def declare_methods(data):
 
 	# declare methods to pyhop
 	for product, methods in product_methods.items():
-		pyhop.declare_methods(product, *methods)
+		pyhop.declare_methods('produce_' + product, *methods)
 
 
 	# for each recipe in data['Recipes']:
@@ -127,6 +128,7 @@ def declare_operators(data):
 	# for each recipe in data['Recipes']:
 	for recipe_name, recipe_rule in data['Recipes'].items():
 		operator = make_operator(recipe_rule)
+		operator.__name__ = 'op_produce_{}'.format(recipe_name.replace(' ', '_'))
 		operators.append(operator)
 	# operator = make_operator(recipe_rule)
 	# operators.append(operator)
@@ -140,27 +142,35 @@ def add_heuristic(data, ID):
 	def heuristic(state, curr_task, tasks, plan, depth, calling_stack):
 		# your code here
 
-		if curr_task in calling_stack:
-			return True
 		# if repeated cycle detected in calling_stack
 		# return True
-		if state.time[ID] < 0:
+		if curr_task in calling_stack:
 			return True
-
+		
 		# check if time left is enough to complete curr_task and remaining tasks
 		# if not enough time
 		# return True
-			
+		if state.time[ID] < 0:
+			return True
+		
+
 		# are we producing something we've already made?
 		# if current task == item we've already made
 		# return True
 
 		if curr_task[0] == 'produce':
 			item = curr_task[2]
-
+			# if we already have the item in our inventory (Tools or Goal)
 			if item in data['Tools'] and getattr(state, item)[ID] >= 1:
 				return True
-		return False
+		
+			# if we already have enough of the item to satisfy the goal
+			goal_amounts = data['Problem']['Goal'].get(item, 0)
+			if goal_amounts > 0 and getattr(state, item)[ID] >= goal_amounts:
+				return True
+			
+			if goal_amounts == 0 and item in data['Items'] and getattr(state, item)[ID] > 0:
+				return True
 
 		# more domain knowledge based pruning conditions
 
@@ -177,8 +187,31 @@ def define_ordering(data, ID):
 		# check for most efficient method (fastest time) to produce the item
 		# prioritize methods with tools or items already available in state (we already have them)
 		# return the reordered methods list
+
+		ready_items = []
+		other_methods = []
+
+		ID = curr_task[1]
+
+		for m in methods:
+			# get the subtasks of the method
+			subtasks = m(state, ID)
+			if subtasks:
+				has_all_ready = True
+				for task in subtasks:
+					if task[0] == 'have_enough':
+						item = task[2]
+						if item in data['Tools'] and getattr(state, item)[ID] < 1:
+							has_all_ready = False
+							break
+				if has_all_ready:
+					ready_items.append(m)
+				else:
+					other_methods.append(m)
+			else:
+				other_methods.append(m)
 		
-		return methods
+		return ready_items + other_methods
 	
 	pyhop.define_ordering(reorder_methods)
 
@@ -226,5 +259,5 @@ if __name__ == '__main__':
 
 	# Hint: verbose output can take a long time even if the solution is correct; 
 	# try verbose=1 if it is taking too long
-	pyhop.pyhop(state, goals, verbose=1)
-	# pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 20)], verbose=3)
+	# pyhop.pyhop(state, goals, verbose=1)
+	pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 20)], verbose=3)
