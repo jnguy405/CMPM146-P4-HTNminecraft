@@ -144,9 +144,21 @@ def add_heuristic(data, ID):
 
 		# if repeated cycle detected in calling_stack
 		# return True
-		if curr_task in calling_stack:
-			return True
 		
+		if curr_task[0] == 'produce':
+			item = curr_task[2]
+
+			if curr_task in calling_stack:
+				return True
+			# if we already have the item in our inventory (Tools or Goal)
+
+			if item in data['Tools'] and getattr(state, item)[ID] >= 1:
+				return True
+			
+			# if we already have enough of the item to satisfy the goal
+			goal_amounts = data['Problem']['Goal'].get(item, 0)
+			if goal_amounts > 0 and getattr(state, item)[ID] >= goal_amounts:
+				return True
 		# check if time left is enough to complete curr_task and remaining tasks
 		# if not enough time
 		# return True
@@ -157,7 +169,7 @@ def add_heuristic(data, ID):
 		# are we producing something we've already made?
 		# if current task == item we've already made
 		# return True
-
+		"""
 		if curr_task[0] == 'produce':
 			item = curr_task[2]
 			# if we already have the item in our inventory (Tools or Goal)
@@ -172,6 +184,7 @@ def add_heuristic(data, ID):
 			if goal_amounts == 0 and item in data['Items'] and getattr(state, item)[ID] > 0:
 				return True
 
+		"""
 		# more domain knowledge based pruning conditions
 
 		return False # if True, prune this branch
@@ -196,18 +209,20 @@ def define_ordering(data, ID):
 		for m in methods:
 			# get the subtasks of the method
 			subtasks = m(state, ID)
-			if subtasks:
-				has_all_ready = True
-				for task in subtasks:
-					if task[0] == 'have_enough':
-						item = task[2]
-						if item in data['Tools'] and getattr(state, item)[ID] < 1:
-							has_all_ready = False
-							break
-				if has_all_ready:
-					ready_items.append(m)
-				else:
-					other_methods.append(m)
+			# check if all 'have_enough' subtasks can be satisfied with current state
+			if not subtasks:
+				continue
+
+			is_ready = True
+			for task in subtasks:
+				if task[0] == 'have_enough':
+					item = task[2]
+					required_amount = task[3]
+					if getattr(state, item)[ID] < required_amount:
+						is_ready = False
+						break
+			if is_ready:
+				ready_items.append(m)
 			else:
 				other_methods.append(m)
 		
