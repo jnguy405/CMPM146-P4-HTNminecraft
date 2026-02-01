@@ -204,13 +204,13 @@ def define_ordering(data, ID):
 		ready_items = []
 		other_methods = []
 
-		ID = curr_task[1]
+		# ID = curr_task[1]
 
 		for m in methods:
 			# get the subtasks of the method
 			subtasks = m(state, ID)
 			# check if all 'have_enough' subtasks can be satisfied with current state
-			if not subtasks:
+			if subtasks is False:
 				continue
 
 			is_ready = True
@@ -218,7 +218,7 @@ def define_ordering(data, ID):
 				if task[0] == 'have_enough':
 					item = task[2]
 					required_amount = task[3]
-					if getattr(state, item)[ID] < required_amount:
+					if item in data['Tools'] and getattr(state, item)[ID] < required_amount:
 						is_ready = False
 						break
 			if is_ready:
@@ -274,5 +274,5 @@ if __name__ == '__main__':
 
 	# Hint: verbose output can take a long time even if the solution is correct; 
 	# try verbose=1 if it is taking too long
-	# pyhop.pyhop(state, goals, verbose=1)
-	pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 20)], verbose=3)
+	pyhop.pyhop(state, goals, verbose=1)
+	# pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 20)], verbose=3)
