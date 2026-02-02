@@ -25,7 +25,6 @@ def make_method(name, rule):
 	# Checks the preconditions, then returns the task list if they are met
 	# Calls the appropriate operator to perform the action
 	def method(state, ID):
-		# ID = args[0]
 		# list of tasks
 		tasks = []
 		# foreach precondition in rule['Preconditions']:
@@ -148,16 +147,27 @@ def add_heuristic(data, ID):
 		if curr_task[0] == 'produce':
 			item = curr_task[2]
 
-			if curr_task in calling_stack:
-				return True
+			for task in calling_stack:
+				# if task is producing the same item as curr_task
+				if task[0] == 'produce' and task[2] == item:
+					print("*$***pruning: cycle detected for task {}".format(curr_task))
+					return True
+
+			# if curr_task in calling_stack:
+			# 	print("****pruning: cycle detected for task {}".format(curr_task))
+			# 	return True
+
 			# if we already have the item in our inventory (Tools or Goal)
 
 			if item in data['Tools'] and getattr(state, item)[ID] >= 1:
+				print("*$***pruning: already have tool {}".format(item))
 				return True
 			
 			# if we already have enough of the item to satisfy the goal
 			goal_amounts = data['Problem']['Goal'].get(item, 0)
 			if goal_amounts > 0 and getattr(state, item)[ID] >= goal_amounts:
+				print("Goal amounts for item {}: {}".format(item, goal_amounts))
+				print("*$***pruning: already have enough of goal item {}".format(item))
 				return True
 		# check if time left is enough to complete curr_task and remaining tasks
 		# if not enough time
@@ -169,22 +179,6 @@ def add_heuristic(data, ID):
 		# are we producing something we've already made?
 		# if current task == item we've already made
 		# return True
-		"""
-		if curr_task[0] == 'produce':
-			item = curr_task[2]
-			# if we already have the item in our inventory (Tools or Goal)
-			if item in data['Tools'] and getattr(state, item)[ID] >= 1:
-				return True
-		
-			# if we already have enough of the item to satisfy the goal
-			goal_amounts = data['Problem']['Goal'].get(item, 0)
-			if goal_amounts > 0 and getattr(state, item)[ID] >= goal_amounts:
-				return True
-			
-			if goal_amounts == 0 and item in data['Items'] and getattr(state, item)[ID] > 0:
-				return True
-
-		"""
 		# more domain knowledge based pruning conditions
 
 		return False # if True, prune this branch
@@ -204,11 +198,9 @@ def define_ordering(data, ID):
 		ready_items = []
 		other_methods = []
 
-		# ID = curr_task[1]
-
 		for m in methods:
 			# get the subtasks of the method
-			subtasks = m(state, ID)
+			subtasks = pyhop.get_subtasks(m, state, curr_task)
 			# check if all 'have_enough' subtasks can be satisfied with current state
 			if subtasks is False:
 				continue
@@ -274,5 +266,5 @@ if __name__ == '__main__':
 
 	# Hint: verbose output can take a long time even if the solution is correct; 
 	# try verbose=1 if it is taking too long
-	pyhop.pyhop(state, goals, verbose=1)
+	pyhop.pyhop(state, goals, verbose=3)
 	# pyhop.pyhop(state, [('have_enough', 'agent', 'cart', 1),('have_enough', 'agent', 'rail', 20)], verbose=3)
