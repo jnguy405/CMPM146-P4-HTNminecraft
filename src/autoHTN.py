@@ -153,12 +153,15 @@ def add_heuristic(data, ID):
 					print("*$***pruning: cycle detected for task {}".format(curr_task))
 					return True
 
+			# Too much pruning, insufficient plans 
 			# if curr_task in calling_stack:
 			# 	print("****pruning: cycle detected for task {}".format(curr_task))
 			# 	return True
 
 			# if we already have the item in our inventory (Tools or Goal)
 
+			# Correct but not enough pruning
+			# Check tools not current state and plan, duplicates and set flags, 
 			if item in data['Tools'] and getattr(state, item)[ID] >= 1:
 				print("*$***pruning: already have tool {}".format(item))
 				return True
