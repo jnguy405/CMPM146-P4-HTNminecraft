@@ -204,16 +204,20 @@ def define_ordering(data, ID):
 		for m in methods:
 			# get the subtasks of the method
 			subtasks = pyhop.get_subtasks(m, state, curr_task)
+			print("Method: {}, Subtasks: {}".format(m.__name__, subtasks))
 			# check if all 'have_enough' subtasks can be satisfied with current state
 			if subtasks is False:
 				continue
 
 			is_ready = True
 			for task in subtasks:
+				print("  Checking task: {}".format(task))
 				if task[0] == 'have_enough':
 					item = task[2]
 					required_amount = task[3]
 					if item in data['Tools'] and getattr(state, item)[ID] < required_amount:
+						print("    Not enough tool: {} (have {}, need {})".format(item, getattr(state, item)[ID], required_amount))
+						print(" data['Tools']: {}".format(data['Tools']))
 						is_ready = False
 						break
 			if is_ready:

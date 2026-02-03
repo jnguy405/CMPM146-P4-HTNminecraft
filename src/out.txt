@@ -10,6 +10,10 @@ depth 1 method instance ('produce', 'agent', 'iron_pickaxe')
 depth 1 new tasks: [('produce_iron_pickaxe', 'agent')]
 depth 2 tasks [('produce_iron_pickaxe', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 2 method instance ('produce_iron_pickaxe', 'agent')
+Method: method, Subtasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent')]
+  Checking task: ('have_enough', 'agent', 'bench', 1)
+    Not enough tool: bench (have 0, need 1)
+ data['Tools']: ['bench', 'furnace', 'iron_axe', 'iron_pickaxe', 'stone_axe', 'stone_pickaxe', 'wooden_axe', 'wooden_pickaxe']
 depth 2 new tasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent')]
 depth 3 tasks [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 3 method instance ('have_enough', 'agent', 'bench', 1)
@@ -20,6 +24,9 @@ depth 4 method instance ('produce', 'agent', 'bench')
 depth 4 new tasks: [('produce_bench', 'agent')]
 depth 5 tasks [('produce_bench', 'agent'), ('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 5 method instance ('produce_bench', 'agent')
+Method: method, Subtasks: [('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent')]
+  Checking task: ('have_enough', 'agent', 'plank', 4)
+  Checking task: ('op_produce_craft_bench', 'agent')
 depth 5 new tasks: [('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent')]
 depth 6 tasks [('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent'), ('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 6 method instance ('have_enough', 'agent', 'plank', 4)
@@ -30,6 +37,9 @@ depth 7 method instance ('produce', 'agent', 'plank')
 depth 7 new tasks: [('produce_plank', 'agent')]
 depth 8 tasks [('produce_plank', 'agent'), ('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent'), ('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 8 method instance ('produce_plank', 'agent')
+Method: method, Subtasks: [('have_enough', 'agent', 'wood', 1), ('op_produce_craft_plank', 'agent')]
+  Checking task: ('have_enough', 'agent', 'wood', 1)
+  Checking task: ('op_produce_craft_plank', 'agent')
 depth 8 new tasks: [('have_enough', 'agent', 'wood', 1), ('op_produce_craft_plank', 'agent')]
 depth 9 tasks [('have_enough', 'agent', 'wood', 1), ('op_produce_craft_plank', 'agent'), ('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent'), ('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 9 method instance ('have_enough', 'agent', 'wood', 1)
@@ -40,6 +50,20 @@ depth 10 method instance ('produce', 'agent', 'wood')
 depth 10 new tasks: [('produce_wood', 'agent')]
 depth 11 tasks [('produce_wood', 'agent'), ('have_enough', 'agent', 'wood', 1), ('op_produce_craft_plank', 'agent'), ('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent'), ('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 11 method instance ('produce_wood', 'agent')
+Method: method, Subtasks: [('have_enough', 'agent', 'iron_axe', 1), ('op_produce_iron_axe_for_wood', 'agent')]
+  Checking task: ('have_enough', 'agent', 'iron_axe', 1)
+    Not enough tool: iron_axe (have 0, need 1)
+ data['Tools']: ['bench', 'furnace', 'iron_axe', 'iron_pickaxe', 'stone_axe', 'stone_pickaxe', 'wooden_axe', 'wooden_pickaxe']
+Method: method, Subtasks: [('have_enough', 'agent', 'stone_axe', 1), ('op_produce_stone_axe_for_wood', 'agent')]
+  Checking task: ('have_enough', 'agent', 'stone_axe', 1)
+    Not enough tool: stone_axe (have 0, need 1)
+ data['Tools']: ['bench', 'furnace', 'iron_axe', 'iron_pickaxe', 'stone_axe', 'stone_pickaxe', 'wooden_axe', 'wooden_pickaxe']
+Method: method, Subtasks: [('have_enough', 'agent', 'wooden_axe', 1), ('op_produce_wooden_axe_for_wood', 'agent')]
+  Checking task: ('have_enough', 'agent', 'wooden_axe', 1)
+    Not enough tool: wooden_axe (have 0, need 1)
+ data['Tools']: ['bench', 'furnace', 'iron_axe', 'iron_pickaxe', 'stone_axe', 'stone_pickaxe', 'wooden_axe', 'wooden_pickaxe']
+Method: method, Subtasks: [('op_produce_punch_for_wood', 'agent')]
+  Checking task: ('op_produce_punch_for_wood', 'agent')
 depth 11 new tasks: [('op_produce_punch_for_wood', 'agent')]
 depth 12 tasks [('op_produce_punch_for_wood', 'agent'), ('have_enough', 'agent', 'wood', 1), ('op_produce_craft_plank', 'agent'), ('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent'), ('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 12 action ('op_produce_punch_for_wood', 'agent')
@@ -122,6 +146,10 @@ depth 19 method instance ('produce', 'agent', 'ingot')
 depth 19 new tasks: [('produce_ingot', 'agent')]
 depth 20 tasks [('produce_ingot', 'agent'), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 20 method instance ('produce_ingot', 'agent')
+Method: method, Subtasks: [('have_enough', 'agent', 'furnace', 1), ('have_enough', 'agent', 'coal', 1), ('have_enough', 'agent', 'ore', 1), ('op_produce_smelt_ore_in_furnace', 'agent')]
+  Checking task: ('have_enough', 'agent', 'furnace', 1)
+    Not enough tool: furnace (have 0, need 1)
+ data['Tools']: ['bench', 'furnace', 'iron_axe', 'iron_pickaxe', 'stone_axe', 'stone_pickaxe', 'wooden_axe', 'wooden_pickaxe']
 depth 20 new tasks: [('have_enough', 'agent', 'furnace', 1), ('have_enough', 'agent', 'coal', 1), ('have_enough', 'agent', 'ore', 1), ('op_produce_smelt_ore_in_furnace', 'agent')]
 depth 21 tasks [('have_enough', 'agent', 'furnace', 1), ('have_enough', 'agent', 'coal', 1), ('have_enough', 'agent', 'ore', 1), ('op_produce_smelt_ore_in_furnace', 'agent'), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 21 method instance ('have_enough', 'agent', 'furnace', 1)
@@ -132,6 +160,10 @@ depth 22 method instance ('produce', 'agent', 'furnace')
 depth 22 new tasks: [('produce_furnace', 'agent')]
 depth 23 tasks [('produce_furnace', 'agent'), ('have_enough', 'agent', 'furnace', 1), ('have_enough', 'agent', 'coal', 1), ('have_enough', 'agent', 'ore', 1), ('op_produce_smelt_ore_in_furnace', 'agent'), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 23 method instance ('produce_furnace', 'agent')
+Method: method, Subtasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'cobble', 8), ('op_produce_craft_furnace_at_bench', 'agent')]
+  Checking task: ('have_enough', 'agent', 'bench', 1)
+  Checking task: ('have_enough', 'agent', 'cobble', 8)
+  Checking task: ('op_produce_craft_furnace_at_bench', 'agent')
 depth 23 new tasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'cobble', 8), ('op_produce_craft_furnace_at_bench', 'agent')]
 depth 24 tasks [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'cobble', 8), ('op_produce_craft_furnace_at_bench', 'agent'), ('have_enough', 'agent', 'furnace', 1), ('have_enough', 'agent', 'coal', 1), ('have_enough', 'agent', 'ore', 1), ('op_produce_smelt_ore_in_furnace', 'agent'), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 24 method instance ('have_enough', 'agent', 'bench', 1)
@@ -145,6 +177,18 @@ depth 26 method instance ('produce', 'agent', 'cobble')
 depth 26 new tasks: [('produce_cobble', 'agent')]
 depth 27 tasks [('produce_cobble', 'agent'), ('have_enough', 'agent', 'cobble', 8), ('op_produce_craft_furnace_at_bench', 'agent'), ('have_enough', 'agent', 'furnace', 1), ('have_enough', 'agent', 'coal', 1), ('have_enough', 'agent', 'ore', 1), ('op_produce_smelt_ore_in_furnace', 'agent'), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 27 method instance ('produce_cobble', 'agent')
+Method: method, Subtasks: [('have_enough', 'agent', 'iron_pickaxe', 1), ('op_produce_iron_pickaxe_for_cobble', 'agent')]
+  Checking task: ('have_enough', 'agent', 'iron_pickaxe', 1)
+    Not enough tool: iron_pickaxe (have 0, need 1)
+ data['Tools']: ['bench', 'furnace', 'iron_axe', 'iron_pickaxe', 'stone_axe', 'stone_pickaxe', 'wooden_axe', 'wooden_pickaxe']
+Method: method, Subtasks: [('have_enough', 'agent', 'stone_pickaxe', 1), ('op_produce_stone_pickaxe_for_cobble', 'agent')]
+  Checking task: ('have_enough', 'agent', 'stone_pickaxe', 1)
+    Not enough tool: stone_pickaxe (have 0, need 1)
+ data['Tools']: ['bench', 'furnace', 'iron_axe', 'iron_pickaxe', 'stone_axe', 'stone_pickaxe', 'wooden_axe', 'wooden_pickaxe']
+Method: method, Subtasks: [('have_enough', 'agent', 'wooden_pickaxe', 1), ('op_produce_wooden_pickaxe_for_cobble', 'agent')]
+  Checking task: ('have_enough', 'agent', 'wooden_pickaxe', 1)
+    Not enough tool: wooden_pickaxe (have 0, need 1)
+ data['Tools']: ['bench', 'furnace', 'iron_axe', 'iron_pickaxe', 'stone_axe', 'stone_pickaxe', 'wooden_axe', 'wooden_pickaxe']
 depth 27 new tasks: [('have_enough', 'agent', 'iron_pickaxe', 1), ('op_produce_iron_pickaxe_for_cobble', 'agent')]
 depth 28 tasks [('have_enough', 'agent', 'iron_pickaxe', 1), ('op_produce_iron_pickaxe_for_cobble', 'agent'), ('have_enough', 'agent', 'cobble', 8), ('op_produce_craft_furnace_at_bench', 'agent'), ('have_enough', 'agent', 'furnace', 1), ('have_enough', 'agent', 'coal', 1), ('have_enough', 'agent', 'ore', 1), ('op_produce_smelt_ore_in_furnace', 'agent'), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 28 method instance ('have_enough', 'agent', 'iron_pickaxe', 1)
@@ -163,6 +207,11 @@ depth 29 method instance ('produce', 'agent', 'stone_pickaxe')
 depth 29 new tasks: [('produce_stone_pickaxe', 'agent')]
 depth 30 tasks [('produce_stone_pickaxe', 'agent'), ('have_enough', 'agent', 'stone_pickaxe', 1), ('op_produce_stone_pickaxe_for_cobble', 'agent'), ('have_enough', 'agent', 'cobble', 8), ('op_produce_craft_furnace_at_bench', 'agent'), ('have_enough', 'agent', 'furnace', 1), ('have_enough', 'agent', 'coal', 1), ('have_enough', 'agent', 'ore', 1), ('op_produce_smelt_ore_in_furnace', 'agent'), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 30 method instance ('produce_stone_pickaxe', 'agent')
+Method: method, Subtasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'cobble', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_stone_pickaxe_at_bench', 'agent')]
+  Checking task: ('have_enough', 'agent', 'bench', 1)
+  Checking task: ('have_enough', 'agent', 'cobble', 3)
+  Checking task: ('have_enough', 'agent', 'stick', 2)
+  Checking task: ('op_produce_craft_stone_pickaxe_at_bench', 'agent')
 depth 30 new tasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'cobble', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_stone_pickaxe_at_bench', 'agent')]
 depth 31 tasks [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'cobble', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_stone_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'stone_pickaxe', 1), ('op_produce_stone_pickaxe_for_cobble', 'agent'), ('have_enough', 'agent', 'cobble', 8), ('op_produce_craft_furnace_at_bench', 'agent'), ('have_enough', 'agent', 'furnace', 1), ('have_enough', 'agent', 'coal', 1), ('have_enough', 'agent', 'ore', 1), ('op_produce_smelt_ore_in_furnace', 'agent'), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 31 method instance ('have_enough', 'agent', 'bench', 1)
@@ -191,6 +240,11 @@ depth 29 method instance ('produce', 'agent', 'wooden_pickaxe')
 depth 29 new tasks: [('produce_wooden_pickaxe', 'agent')]
 depth 30 tasks [('produce_wooden_pickaxe', 'agent'), ('have_enough', 'agent', 'wooden_pickaxe', 1), ('op_produce_wooden_pickaxe_for_cobble', 'agent'), ('have_enough', 'agent', 'cobble', 8), ('op_produce_craft_furnace_at_bench', 'agent'), ('have_enough', 'agent', 'furnace', 1), ('have_enough', 'agent', 'coal', 1), ('have_enough', 'agent', 'ore', 1), ('op_produce_smelt_ore_in_furnace', 'agent'), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 30 method instance ('produce_wooden_pickaxe', 'agent')
+Method: method, Subtasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'plank', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_wooden_pickaxe_at_bench', 'agent')]
+  Checking task: ('have_enough', 'agent', 'bench', 1)
+  Checking task: ('have_enough', 'agent', 'plank', 3)
+  Checking task: ('have_enough', 'agent', 'stick', 2)
+  Checking task: ('op_produce_craft_wooden_pickaxe_at_bench', 'agent')
 depth 30 new tasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'plank', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_wooden_pickaxe_at_bench', 'agent')]
 depth 31 tasks [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'plank', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_wooden_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'wooden_pickaxe', 1), ('op_produce_wooden_pickaxe_for_cobble', 'agent'), ('have_enough', 'agent', 'cobble', 8), ('op_produce_craft_furnace_at_bench', 'agent'), ('have_enough', 'agent', 'furnace', 1), ('have_enough', 'agent', 'coal', 1), ('have_enough', 'agent', 'ore', 1), ('op_produce_smelt_ore_in_furnace', 'agent'), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 31 method instance ('have_enough', 'agent', 'bench', 1)
@@ -247,6 +301,10 @@ depth 13 method instance ('produce', 'agent', 'iron_axe')
 depth 13 new tasks: [('produce_iron_axe', 'agent')]
 depth 14 tasks [('produce_iron_axe', 'agent'), ('have_enough', 'agent', 'iron_axe', 1), ('op_produce_iron_axe_for_wood', 'agent'), ('have_enough', 'agent', 'wood', 1), ('op_produce_craft_plank', 'agent'), ('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent'), ('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 14 method instance ('produce_iron_axe', 'agent')
+Method: method, Subtasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_axe_at_bench', 'agent')]
+  Checking task: ('have_enough', 'agent', 'bench', 1)
+    Not enough tool: bench (have 0, need 1)
+ data['Tools']: ['bench', 'furnace', 'iron_axe', 'iron_pickaxe', 'stone_axe', 'stone_pickaxe', 'wooden_axe', 'wooden_pickaxe']
 depth 14 new tasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_axe_at_bench', 'agent')]
 depth 15 tasks [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_axe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_axe', 1), ('op_produce_iron_axe_for_wood', 'agent'), ('have_enough', 'agent', 'wood', 1), ('op_produce_craft_plank', 'agent'), ('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent'), ('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 15 method instance ('have_enough', 'agent', 'bench', 1)
@@ -268,6 +326,10 @@ depth 13 method instance ('produce', 'agent', 'stone_axe')
 depth 13 new tasks: [('produce_stone_axe', 'agent')]
 depth 14 tasks [('produce_stone_axe', 'agent'), ('have_enough', 'agent', 'stone_axe', 1), ('op_produce_stone_axe_for_wood', 'agent'), ('have_enough', 'agent', 'wood', 1), ('op_produce_craft_plank', 'agent'), ('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent'), ('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 14 method instance ('produce_stone_axe', 'agent')
+Method: method, Subtasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'cobble', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_stone_axe_at_bench', 'agent')]
+  Checking task: ('have_enough', 'agent', 'bench', 1)
+    Not enough tool: bench (have 0, need 1)
+ data['Tools']: ['bench', 'furnace', 'iron_axe', 'iron_pickaxe', 'stone_axe', 'stone_pickaxe', 'wooden_axe', 'wooden_pickaxe']
 depth 14 new tasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'cobble', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_stone_axe_at_bench', 'agent')]
 depth 15 tasks [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'cobble', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_stone_axe_at_bench', 'agent'), ('have_enough', 'agent', 'stone_axe', 1), ('op_produce_stone_axe_for_wood', 'agent'), ('have_enough', 'agent', 'wood', 1), ('op_produce_craft_plank', 'agent'), ('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent'), ('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 15 method instance ('have_enough', 'agent', 'bench', 1)
@@ -289,6 +351,10 @@ depth 13 method instance ('produce', 'agent', 'wooden_axe')
 depth 13 new tasks: [('produce_wooden_axe', 'agent')]
 depth 14 tasks [('produce_wooden_axe', 'agent'), ('have_enough', 'agent', 'wooden_axe', 1), ('op_produce_wooden_axe_for_wood', 'agent'), ('have_enough', 'agent', 'wood', 1), ('op_produce_craft_plank', 'agent'), ('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent'), ('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 14 method instance ('produce_wooden_axe', 'agent')
+Method: method, Subtasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'plank', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_wooden_axe_at_bench', 'agent')]
+  Checking task: ('have_enough', 'agent', 'bench', 1)
+    Not enough tool: bench (have 0, need 1)
+ data['Tools']: ['bench', 'furnace', 'iron_axe', 'iron_pickaxe', 'stone_axe', 'stone_pickaxe', 'wooden_axe', 'wooden_pickaxe']
 depth 14 new tasks: [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'plank', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_wooden_axe_at_bench', 'agent')]
 depth 15 tasks [('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'plank', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_wooden_axe_at_bench', 'agent'), ('have_enough', 'agent', 'wooden_axe', 1), ('op_produce_wooden_axe_for_wood', 'agent'), ('have_enough', 'agent', 'wood', 1), ('op_produce_craft_plank', 'agent'), ('have_enough', 'agent', 'plank', 4), ('op_produce_craft_bench', 'agent'), ('have_enough', 'agent', 'bench', 1), ('have_enough', 'agent', 'ingot', 3), ('have_enough', 'agent', 'stick', 2), ('op_produce_craft_iron_pickaxe_at_bench', 'agent'), ('have_enough', 'agent', 'iron_pickaxe', 1)]
 depth 15 method instance ('have_enough', 'agent', 'bench', 1)
